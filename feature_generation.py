@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 
  
-# Alpha01
 def alpha001(df):
     """
     Alpha#1

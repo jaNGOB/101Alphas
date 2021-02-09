@@ -69,3 +69,12 @@ def ts_argmax(df, d):
     return df.rolling(d).apply(np.argmax).add(1)
 
 
+def ts_rank(df, d):
+    """
+    time-series rank in the past d days
+    
+    :param df: dataframe
+    :param d: number of days to look back (rolling window)
+    :return: Pandas Series
+    """
+    return df.rolling(d).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
