@@ -22,3 +22,19 @@ def alpha002(df):
     tmp_1 = u.rank(u.delta(np.log(df.volume), 2))
     tmp_2 = u.rank(((df.close - df.open) / df.open))
     return (-1 * u.corr(tmp_1, tmp_2, 6))
+
+
+def alpha003(df):
+    """
+    Alpha#3
+    (-1 * correlation(rank(open), rank(volume), 10))
+    """
+    return (-1 * u.corr(u.rank(df.open), u.rank(df.volume), 10))
+
+
+def alpha004(df):
+    """
+    Alpha #4
+    (-1 * Ts_Rank(rank(low), 9))
+    """
+    return (-1 * u.ts_rank(u.rank(df.low), 9))
