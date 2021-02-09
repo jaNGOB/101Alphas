@@ -8,7 +8,7 @@ def rank(df):
     :param df:
     :return: 
     """
-    return df.rank(axis=1, pct=True)
+    return df.rank(pct=True)
 
 
 def stddev(df, d):
@@ -20,6 +20,20 @@ def stddev(df, d):
     :return:
     """
     return df.rolling(d).std()
+
+
+def delta(df, d):
+    """
+    today’s value of x minus the value of x d days ago
+    """
+    return df - df.shift(d)
+
+
+def corr(x, y, d):
+    """
+    time-serial correlation of x and y for the past d days 
+    """
+    return x.rolling(d).corr(y)
 
 
 def ts_max(df, d=10):
