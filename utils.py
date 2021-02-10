@@ -2,12 +2,12 @@ import pandas as pd
 import numpy as np
 
 
+### Initial Operations
 def returns(df):
     """
     close-to-close returns
     """
     return df.close / df.close.shift(1) - 1
-
 
 def vwap(df):
     """
@@ -15,6 +15,13 @@ def vwap(df):
     """
     return (df.volume * df.close) / df.volume 
 
+def adv(df, d):
+    """
+    adv{d} = average daily dollar volume for the past d days 
+    """
+    return df.volume.rolling(d).mean()
+
+###
 def rank(df):
     """
     Cross-sectional percentile rank.
@@ -50,13 +57,19 @@ def corr(x, y, d):
     return x.rolling(d).corr(y)
 
 
+def cov(x, y, d):
+    """
+    time-serial covariance of x and y for the past d days 
+    """
+    return x.rolling(d).cov(y)
+
 def delay(df, d):
     """
     value of x d days ago
     """
     return df.shift(d)
 
-
+### Time-Series Operations
 def ts_max(df, d=10):
     """
     The rolling max over the last d days. 
