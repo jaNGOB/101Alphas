@@ -1,6 +1,20 @@
 import pandas as pd
 import numpy as np
 
+
+def returns(df):
+    """
+    close-to-close returns
+    """
+    return df.close / df.close.shift(1) - 1
+
+
+def vwap(df):
+    """
+    volume-weighted average price 
+    """
+    return (df.volume * df.close) / df.volume 
+
 def rank(df):
     """
     Cross-sectional percentile rank.
@@ -34,6 +48,13 @@ def corr(x, y, d):
     time-serial correlation of x and y for the past d days 
     """
     return x.rolling(d).corr(y)
+
+
+def delay(df, d):
+    """
+    value of x d days ago
+    """
+    return df.shift(d)
 
 
 def ts_max(df, d=10):
@@ -78,3 +99,9 @@ def ts_rank(df, d):
     :return: Pandas Series
     """
     return df.rolling(d).apply(lambda x: pd.Series(x).rank(pct=True).iloc[-1])
+
+def ts_sum(df, d):
+    """
+    time-series sum over the past d days
+    """
+    return df.rolling(d).sum()
