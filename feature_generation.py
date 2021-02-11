@@ -277,3 +277,166 @@ def alpha31(df):
     + rank((-1 * delta(close, 3)))) + sign(scale(correlation(adv20, low, 12))))
     """
     pass
+
+def alpha32(df):
+    """
+    Alpha#32
+    (scale(((sum(close, 7) / 7) - close)) + 
+    (20 * scale(correlation(vwap, delay(close, 5), 230)))) 
+    """
+    temp1 = u.scale(((u.ts_sum(df.close, 7) / 7) - df.close))
+    temp2 = (20 * u.scale(u.corr(df.vwap, u.delay(df.close, 5), 230)))
+    return temp1 + temp2
+
+def alpha33(df):
+    """
+    Alpha#33
+    rank((-1 * ((1 - (open / close))^1)))
+    """
+    return u.rank((-1 * ((1 - (df.open / df.close))**1)))
+
+def alpha34(df):
+    """
+    Alpha#34
+    rank(((1 - rank((stddev(returns, 2) / stddev(returns, 5)))) + (1 - rank(delta(close, 1))))) 
+    """
+    return u.rank(((1 - u.rank((u.stddev(df.returns, 2) / u.stddev(df.returns, 5)))) \
+            + (1 - u.rank(u.delta(df.close, 1)))))
+
+def alpha35(df):
+    """
+    Alpha#35
+    ((Ts_Rank(volume, 32) * (1 - Ts_Rank(((close + high) - low), 16))) * 
+    (1 - Ts_Rank(returns, 32)))
+    """
+    return ((u.ts_rank(df.volume, 32) * (1 - u.ts_rank(((df.close + df.high) - df.low), 16))) \
+            * (1 - u.ts_rank(df.returns, 32)))
+
+def alpha36(df):
+    """
+    Alpha#36
+    (((((2.21 * rank(correlation((close - open), delay(volume, 1), 15))) + 
+    (0.7 * rank((open - close)))) + (0.73 * rank(Ts_Rank(delay((-1 * returns), 6), 5)))) + 
+    rank(abs(correlation(vwap, adv20, 6)))) + (0.6 * rank((((sum(close, 200) / 200) - open) * (close - open))))) 
+    """
+    temp1 = (2.21 * u.rank(u.corr((df.close - df.open), u.delay(df.volume, 1), 15)))
+    temp2 = (0.7 * u.rank((df.open - df.close)))
+    temp3 = (0.73 * u.rank(u.ts_rank(u.delay((-1 * df.returns), 6), 5)))
+    temp4 = u.rank(abs(u.corr(df.vwap, df.adv20, 6)))
+    temp5 = (0.6 * u.rank((((sum(df.close, 200) / 200) - df.open) * (df.close - df.open))))
+    return ((((temp1 + temp2) + temp3) + temp4) + temp5)
+
+def alpha37(df):
+    """
+    Alpha#37
+    (rank(correlation(delay((open - close), 1), close, 200)) + rank((open - close))) 
+    """
+    return (u.rank(u.corr(u.delay((df.open - df.close), 1), df.close, 200)) + u.rank((df.open - df.close)))
+
+def alpha38(df):
+    """
+    Alpha#38
+    ((-1 * rank(Ts_Rank(close, 10))) * rank((close / open))) 
+    """
+    return ((-1 * u.rank(u.ts_rank(df.close, 10))) * u.rank((df.close / df.open)))
+
+def alpha39(df):
+    """
+    Alpha#39
+
+    """
+    temp = (-1 * u.rank((u.delta(df.close, 7) * (1 - u.rank(u.decay_linear((df.volume / df.adv20), 9))))))
+    return (temp * (1 + u.rank(u.ts_sum(df.returns, 250))))
+
+def alpha40(df):
+    """
+    Alpha#40
+    ((-1 * rank(stddev(high, 10))) * correlation(high, volume, 10))
+    """
+    return ((-1 * u.rank(u.stddev(df.high, 10))) * u.corr(df.high, df.volume, 10))
+
+def alpha41(df):
+    """
+    Alpha#41
+    (((high * low)^0.5) - vwap) 
+    """
+    return (((df.high * df.low)**0.5) - df.vwap)
+
+def alpha42(df):
+    """
+    Alpha#42
+    (rank((vwap - close)) / rank((vwap + close))) 
+    """
+    return (u.rank((df.vwap - df.close)) / u.rank((df.vwap + df.close)))
+
+def alpha43(df):
+    """
+    Alpha#43
+    (ts_rank((volume / adv20), 20) * ts_rank((-1 * delta(close, 7)), 8)) 
+    """
+    return (u.ts_rank((df.volume / df.adv20), 20) * u.ts_rank((-1 * u.delta(df.close, 7)), 8))
+
+def alpha44(df):
+    """
+    Alpha#44
+    (-1 * correlation(high, rank(volume), 5))
+    """
+    return (-1 * u.corr(df.high, u.rank(df.volume), 5))
+
+def alpha45(df):
+    """
+    Alpha#45
+    (-1 * ((rank((sum(delay(close, 5), 20) / 20)) * correlation(close, volume, 2)) 
+    * rank(correlation(sum(close, 5), sum(close, 20), 2)))) 
+    """
+    temp1 = u.rank((u.ts_sum(u.delay(df.close, 5), 20) / 20))
+    temp2 = u.corr(df.close, df.volume, 2)
+    temp3 = u.rank(u.corr(u.ts_sum(df.close, 5), u.ts_sum(df.close, 20), 2))
+    return (-1 * ((temp1 * temp2) * temp3))
+
+def alpha46(df):
+    """
+    Alpha#46
+    ((0.25 < (((delay(close, 20) - delay(close, 10)) / 10) - ((delay(close, 10) - close) / 10))) ? (-1 * 1) : 
+    (((((delay(close, 20) - delay(close, 10)) / 10) - ((delay(close, 10) - close) / 10)) < 0) ? 1 :
+    ((-1 * 1) * (close - delay(close, 1)))))
+    """
+    decision1 = (0.25 < (((u.delay(df.close, 20) - u.delay(df.close, 10)) / 10) - ((u.delay(df.close, 10) - df.close) / 10)))
+    decision2 = ((((u.delay(df.close, 20) - u.delay(df.close, 10)) / 10) - ((u.delay(df.close, 10) - df.close) / 10)) < 0)
+    iffalse = ((-1 * 1) * (df.close - u.delay(df.close, 1)))
+    return pd.Series(np.where(decision1, (-1 * 1), np.where(decision2, 1, iffalse)), index=df.index)
+
+def alpha47(df):
+    """
+    Alpha#47
+    ((((rank((1 / close)) * volume) / adv20) * 
+    ((high * rank((high - close))) / (sum(high, 5) / 5))) - rank((vwap - delay(vwap, 5)))) 
+    """
+    temp1 = ((u.rank((1 / df.close)) * df.volume) / df.adv20)
+    temp2 = ((df.high * u.rank((df.high - df.close))) / (u.ts_sum(df.high, 5) / 5))
+    return ((temp1 * temp2) - u.rank((df.vwap - u.delay(df.vwap, 5))))
+
+def alpha48(df):
+    """
+    Alpha#48
+    (indneutralize(((correlation(delta(close, 1), delta(delay(close, 1), 1), 250) *
+    delta(close, 1)) / close), IndClass.subindustry) / sum(((delta(close, 1) / delay(close, 1))^2), 250))
+    """
+    pass
+
+def alpha49(df):
+    """
+    Alpha#49
+    (((((delay(close, 20) - delay(close, 10)) / 10) - ((delay(close, 10) - close) / 10)) < 
+    (-1 * 0.1)) ? 1 : ((-1 * 1) * (close - delay(close, 1))))
+    """
+    temp1 = ((u.delay(df.close, 20) - u.delay(df.close, 10)) / 10)
+    temp2 = ((u.delay(df.close, 10) - df.close) / 10)
+    return pd.Series(np.where(((temp1 - temp2) < (-1 * 0.1)), 1, ((-1 * 1) * (df.close - u.delay(df.close, 1)))), index=df.index)
+
+def alpha50(df):
+    """
+    Alpha#50
+    (-1 * ts_max(rank(correlation(rank(volume), rank(vwap), 5)), 5))
+    """
+    return (-1 * u.ts_max(u.rank(u.corr(u.rank(df.volume), u.rank(df.vwap), 5)), 5))
