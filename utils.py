@@ -43,6 +43,26 @@ def stddev(df, d):
     return df.rolling(d).std()
 
 
+def scale(df, a=1):
+    """
+    rescaled x such that sum(abs(x)) = a (the default is a = 1) 
+    :param df:
+    :param a:
+    :return:
+    """
+    return df.abs() / df.replace([np.inf, -np.inf], np.nan).abs().sum(skipna=True)
+
+def decay_linear(df, d):
+    """
+    weighted moving average over the past d days with linearly decaying
+    weights d, d – 1, …, 1 (rescaled to sum up to 1)
+    :param df: data frame containing prices
+    :param d: number of days to look back (rolling window)
+    :return: Pandas series 
+    """
+    return df.ewm(d).mean()
+
+
 def delta(df, d):
     """
     today’s value of x minus the value of x d days ago
