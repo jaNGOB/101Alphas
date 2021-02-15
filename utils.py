@@ -52,6 +52,15 @@ def scale(df, a=1):
     """
     return df.abs() / df.replace([np.inf, -np.inf], np.nan).abs().sum(skipna=True)
 
+def product(df, d):
+    """
+    time-series product over the past d days
+    :param df: data frame containing prices
+    :param d: number of days to look back (rolling window)
+    :return: Pandas series 
+    """
+    return df.rolling(d).apply(np.product)
+
 def decay_linear(df, d):
     """
     weighted moving average over the past d days with linearly decaying
@@ -121,6 +130,17 @@ def ts_argmax(df, d):
     :return: Pandas Series
     """
     return df.rolling(d).apply(np.argmax).add(1)
+
+
+def ts_argmin(df, d):
+    """
+    Gets the day, ts_min(x, d) occured on.
+
+    :param df: dataframe
+    :param d: number of days to look back (rolling window)
+    :return: Pandas Series
+    """
+    return df.rolling(d).apply(np.argmin).add(1)
 
 
 def ts_rank(df, d):
